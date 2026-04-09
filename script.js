@@ -1,10 +1,10 @@
 // Mobile Navigation Toggle
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const navToggle = document.getElementById('navToggle');
     const navMenu = document.getElementById('navMenu');
 
     if (navToggle && navMenu) {
-        navToggle.addEventListener('click', function() {
+        navToggle.addEventListener('click', function () {
             navMenu.classList.toggle('active');
             navToggle.classList.toggle('active');
         });
@@ -12,14 +12,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Close menu when clicking a link
         const navLinks = navMenu.querySelectorAll('.nav-link');
         navLinks.forEach(link => {
-            link.addEventListener('click', function() {
+            link.addEventListener('click', function () {
                 navMenu.classList.remove('active');
                 navToggle.classList.remove('active');
             });
         });
 
         // Close menu when clicking outside
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
                 navMenu.classList.remove('active');
                 navToggle.classList.remove('active');
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Smooth scroll for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
+        anchor.addEventListener('click', function (e) {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Navbar shadow on scroll
     const navbar = document.querySelector('.navbar');
     if (navbar) {
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             if (window.scrollY > 50) {
                 navbar.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.15)';
             } else {
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Form submission
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
+        contactForm.addEventListener('submit', function (e) {
             e.preventDefault();
 
             // Get form data
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!input.value.trim()) {
                     isValid = false;
                     input.style.borderColor = '#E53E3E';
-                    input.addEventListener('input', function() {
+                    input.addEventListener('input', function () {
                         this.style.borderColor = '';
                     }, { once: true });
                 }
@@ -92,22 +92,31 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             if (isValid) {
-                // Simulate form submission
-                const submitBtn = contactForm.querySelector('button[type="submit"]');
-                const originalText = submitBtn.textContent;
-                submitBtn.textContent = 'Enviando...';
-                submitBtn.disabled = true;
+                const reasons = {
+                    tea: 'Suspeita de TEA',
+                    tdah: 'Suspeita de TDAH',
+                    desenvolvimento: 'Atraso no Desenvolvimento',
+                    aprendizagem: 'Dificuldades de Aprendizagem',
+                    neurologica: 'Avaliação Neurológica',
+                    outro: 'Outro'
+                };
 
-                // Simulate API call
-                setTimeout(() => {
-                    alert('Mensagem enviada com sucesso! Entraremos em contato em até 24 horas úteis.');
-                    contactForm.reset();
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-                }, 1500);
+                const mensagem =
+                    `Olá! Gostaria de agendar uma consulta com a Dra. Aline Costa.
 
-                // Log data to console (for debugging)
-                console.log('Form submitted:', data);
+Nome: ${data.name}
+Telefone: ${data.phone}
+E-mail: ${data.email || 'Não informado'}
+Nome da criança: ${data.childName}
+Idade: ${data.childAge} ano${data.childAge == 1 ? '' : 's'}
+Motivo: ${reasons[data.reason] || data.reason}${data.message ? `\nMensagem: ${data.message}` : ''}`;
+
+                // Número atualizado conforme solicitado: +55 44 99944-5725
+                const telefone = '5544999445725';
+                const url = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`;
+
+                window.open(url, '_blank');
+                contactForm.reset();
             } else {
                 alert('Por favor, preencha todos os campos obrigatórios.');
             }
@@ -120,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
         rootMargin: '0px 0px -50px 0px'
     };
 
-    const observer = new IntersectionObserver(function(entries) {
+    const observer = new IntersectionObserver(function (entries) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('fade-in');
@@ -137,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Phone mask
     const phoneInput = document.getElementById('phone');
     if (phoneInput) {
-        phoneInput.addEventListener('input', function(e) {
+        phoneInput.addEventListener('input', function (e) {
             let value = e.target.value.replace(/\D/g, '');
             if (value.length > 11) value = value.slice(0, 11);
 
@@ -167,10 +176,10 @@ if (window.history.replaceState) {
     window.history.replaceState(null, null, window.location.href);
 }
 
-// Lazy load images (if any real images are added later)
+// Lazy load images
 if ('IntersectionObserver' in window) {
     const lazyImages = document.querySelectorAll('img[data-src]');
-    const imageObserver = new IntersectionObserver(function(entries, observer) {
+    const imageObserver = new IntersectionObserver(function (entries, observer) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const img = entry.target;
